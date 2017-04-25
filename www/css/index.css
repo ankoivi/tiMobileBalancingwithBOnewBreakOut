@@ -52,18 +52,20 @@ body {
     left:50%;
     top:50%;
     height:388px;                   /* text area height */
-    width:388px;                   /* text area width */
+    width:648px;/*388px;*/                  /* text area width */
     text-align:center;
     padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
     margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
                                    /* offset horizontal: half of text area width */
 }
-
+.app h1 {
+    margin-left: -140px
+}
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
         background-position:left center;
-        padding:75px 0px 75px 200px;  /* padding-top + padding-bottom + text area = image height */
+        padding:0px 0px 75px 200px;  /* padding-top + padding-bottom + text area = image height */
         margin: -350px 0px 0px -268px;  /* offset vertical: half of image height */
                                       /* offset horizontal: half of image width and text area width */
     }
@@ -113,17 +115,20 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+ul {
+    padding: 0 0 0 0 !important;
+}
 span#time {
     font-size: 40px;
     position: absolute;
     left: 20px;
-    top: 20px;
+    top: 5px;
     padding: 5px;
 }
 div#points {
     position: absolute;
     right: 20px;
-    top: 20px;
+    top: 10px;
     font-size: 40px;
 }
 #player {
@@ -137,7 +142,7 @@ div#points {
     padding: 5px;
 }
 canvas.gamecanvas.canvas0 {
-    background: url('../img/grasstile.png');
+    /*background: url('../img/grasstile.png');*/
 }
 
 #fps, #accelerometerData, #buttonState {
@@ -150,7 +155,7 @@ canvas.gamecanvas.canvas0 {
     margin-right: -50%;
     transform: translate(-50%, -3%);
 }
-#gameOver {
+#gameOver, #nextLevel {
     display: none;
     position: absolute;
     top: 50%;
@@ -174,6 +179,8 @@ canvas.gamecanvas.canvas0 {
     width: 300px;
 }
 #breakout {
-    margin-top: -70px;
+    margin-top: -40px;
 }
-
+#temperatureData {
+    display: none;
+}

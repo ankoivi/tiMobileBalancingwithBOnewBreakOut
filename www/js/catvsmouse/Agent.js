@@ -12,11 +12,11 @@ define(function(){
 				moveX *= 0.3;
 				moveY *= 0.3;
 			} else if (this.tileset.tileSpec.name == 'monster2') {
-				moveX *= 0.4;
-				moveY *= 0.4;
-			} else if (this.tileset.tileSpec.name == 'monster3') {
 				moveX *= 0.5;
 				moveY *= 0.5;
+			} else if (this.tileset.tileSpec.name == 'monster3') {
+				moveX *= 0.7;
+				moveY *= 0.7;
 			} else if (this.tileset.tileSpec.name == 'coin') {
 				moveX *= 0;
 				moveY *= 0;

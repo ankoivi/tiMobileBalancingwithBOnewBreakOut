@@ -59,6 +59,8 @@ function(DependencyLoader,
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,4,4,4,4,0,0,4,4,4,4,0,0,4,4,4,4,4,4,4,0,0,4,0,0,4,0,0,0,2],
 			[3,0,0,0,4,0,0,0,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,0,2],
 			[3,0,0,0,4,0,0,0,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,4,0,0,0,2],
@@ -66,6 +68,8 @@ function(DependencyLoader,
 			[3,0,0,0,0,0,0,4,0,0,4,0,0,4,0,0,4,0,0,0,0,0,4,0,0,4,0,0,4,0,0,0,2],
 			[3,0,0,0,0,0,0,4,0,0,4,0,0,4,0,0,4,0,0,0,0,0,4,0,0,4,0,0,4,0,0,0,2],
 			[3,0,0,0,4,4,4,4,0,0,4,0,0,4,0,0,4,0,0,0,0,0,4,0,0,4,0,0,4,0,0,0,2],
+			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
 			[3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
@@ -101,7 +105,7 @@ function(DependencyLoader,
 			})
 		}),
 		coin = new Mob({
-			position: {x:24,y:1},
+			position: {x:10,y:1},
 			collision: new CollisionMap({
 				map: map
 			}),
@@ -113,7 +117,7 @@ function(DependencyLoader,
 			targetAgent: player
 		}),
 		monster = new Mob({
-			position: {x:20,y:10},
+			position: {x:1,y:18},
 			collision: new CollisionMap({
 				map: map
 			}),
@@ -123,36 +127,42 @@ function(DependencyLoader,
 				onReady: loadCb
 			}),
 			targetAgent: coin
-		});//,
-		// monster2 = new Mob({
-		// 	position: {x:24,y:7},
-		// 	collision: new CollisionMap({
-		// 		map: map
-		// 	}),
-		// 	tileset: new Tileset({
-		// 		spritePath: 'img/sf2-characters.png',
-		// 		specPath: 'spec/sf2-goblin2.json',
-		// 		onReady: loadCb
-		// 	}),
-		// 	targetAgent: coin
-		// }),
-		// monster3 = new Mob({
-		// 	position: {x:20,y:4},
-		// 	collision: new CollisionMap({
-		// 		map: map
-		// 	}),
-		// 	tileset: new Tileset({
-		// 		spritePath: 'img/sf2-characters.png',
-		// 		specPath: 'spec/sf2-goblin3.json',
-		// 		onReady: loadCb
-		// 	}),
-		// 	targetAgent: coin
 		// });
+		}),
+		monster2 = new Mob({
+			position: {x:31,y:1},
+			collision: new CollisionMap({
+				map: map
+			}),
+			tileset: new Tileset({
+				spritePath: 'img/sf2-characters.png',
+				specPath: 'spec/sf2-goblin2.json',
+				onReady: loadCb
+			}),
+			targetAgent: coin
+		}),
+		monster3 = new Mob({
+			position: {x:31,y:18},
+			collision: new CollisionMap({
+				map: map
+			}),
+			tileset: new Tileset({
+				spritePath: 'img/sf2-characters.png',
+				specPath: 'spec/sf2-goblin3.json',
+				onReady: loadCb
+			}),
+			targetAgent: coin
+		});
 	var countdownTimer;
 	var setTime = 60 * 1;
     var display = document.querySelector('#time');
     startTimer(setTime, display);
-
+    var game = {
+		enemies: parseInt(localStorage.getItem("enemies"))
+	};
+	if (game.enemies == null) {
+		game.enemies = 1;
+	}
 	function loadCb(){
 		spritesToLoad--;
 		if(!spritesToLoad){ run(); }
@@ -180,7 +190,7 @@ function(DependencyLoader,
 			}
 		}, 1000);
 	}
-
+	
 	function run(){
 
 		// build layers
@@ -198,17 +208,78 @@ function(DependencyLoader,
 			tileSet: bgTileset,
 			tileSize: tileSize
 		});
-		characterRenderer = new CharacterRenderer({
-			$el: canvases[2],
-			tileSize: tileSize,
-			agents: [
-				player,
-				monster,
-				// monster2,
-				// monster3,
-				coin
-			]
-		});
+		if (game.enemies == 0) {
+			monster = "";
+			monster2 = "";
+			monster3 = "";
+			characterRenderer = new CharacterRenderer({
+				$el: canvases[2],
+				tileSize: tileSize,
+				agents: [
+					player,
+					coin
+				]
+			});
+		} else if (game.enemies == 1) {
+			monster2 = "";
+			monster3 = "";
+			characterRenderer = new CharacterRenderer({
+				$el: canvases[2],
+				tileSize: tileSize,
+				agents: [
+					player,
+					monster,
+					coin
+				]
+			});
+		} else if (game.enemies == 2) {
+			monster3 = "";
+			characterRenderer = new CharacterRenderer({
+				$el: canvases[2],
+				tileSize: tileSize,
+				agents: [
+					player,
+					monster,
+					monster2,
+					coin
+				]
+			});
+		} else if (game.enemies == 3) {
+			characterRenderer = new CharacterRenderer({
+				$el: canvases[2],
+				tileSize: tileSize,
+				agents: [
+					player,
+					monster,
+					monster2,
+					monster3,
+					coin
+				]
+			});
+		} else {
+			monster2 = "";
+			monster3 = "";
+			characterRenderer = new CharacterRenderer({
+				$el: canvases[2],
+				tileSize: tileSize,
+				agents: [
+					player,
+					monster,
+					coin
+				]
+			});
+		}
+		// characterRenderer = new CharacterRenderer({
+		// 	$el: canvases[2],
+		// 	tileSize: tileSize,
+		// 	agents: [
+		// 		player,
+		// 		monster,
+		// 		monster2,
+		// 		monster3,
+		// 		coin
+		// 	]
+		// });
 
 
 
@@ -227,9 +298,21 @@ function(DependencyLoader,
 			}
 			
 			characterRenderer.draw();
-			monster.chooseAction();
-			// monster2.chooseAction();
-			// monster3.chooseAction();
+			if (game.enemies == 0) {
+				// DO NOT ADD ENEMIES
+			} else if (game.enemies == 1) {
+				monster.chooseAction();
+			} else if (game.enemies == 2) {
+				monster.chooseAction();
+				monster2.chooseAction();
+			} else if (game.enemies == 3) {
+				monster.chooseAction();
+				monster2.chooseAction();
+				monster3.chooseAction();
+			} else {
+				monster.chooseAction();
+			}
+			
 			coin.chooseAction();
 			
 			window.requestAnimationFrame(gameLoop);

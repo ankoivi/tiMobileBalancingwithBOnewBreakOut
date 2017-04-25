@@ -86,11 +86,17 @@ var app = {
     charItem: 0,
     goblinCount: 0,
     goblinItem: 1,
+    enemiesCount: 1,
+    mapToUse: 'map',
+    moveToNextLevel: false,
     aX: 0,
+    countdownTimer: null,
+    logging: 0,
     // Application Constructor
     initialize: function() {
         this.bindEvents();
         detailPage.hidden = true;
+        detailPage_cvsm.hidden = true;
     },
     // Bind Event Listeners
     //
@@ -100,8 +106,10 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         refreshButton.addEventListener('touchstart', this.refreshDeviceList, false);
         disconnectButton.addEventListener('touchstart', this.disconnect, false);
+        disconnectButton_cvsm.addEventListener('touchstart', this.disconnect, false);
         document.getElementById('mazeLogo').addEventListener('touchstart', this.startGame, false);
         document.getElementById('boLogo').addEventListener('touchstart', this.startBreakout, false);
+        document.getElementById('catvsmouse').addEventListener('touchstart', this.catvsmouse, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     // deviceready Event Handler
@@ -118,10 +126,13 @@ var app = {
         console.log('deviceready');
         app.refreshDeviceList();
         if (localStorage.getItem('charItem') !== null) {
-            app.charItem = localStorage.getItem('charItem');
+            app.charItem = eval(localStorage.getItem('charItem'));
         }
         if (localStorage.getItem('goblinItem') !== null) {
-            app.goblinItem = localStorage.getItem('goblinItem');
+            app.goblinItem = eval(localStorage.getItem('goblinItem'));
+        }
+        if (localStorage.getItem('enemies') !== null) {
+            app.enemiesCount = localStorage.getItem('enemies');
         }
 
         // TODO character selection and speed + opposite
@@ -129,17 +140,20 @@ var app = {
         for (var i = 0; i < 27; i++) {
             if (i === 0 || i == 12 || i == 13 || i == 19 || i == 20 || i == 23 || i == 24 || i == 25) {
                 app.players.push(i);
-                $('#characters').append('<div id="'+i+'" onclick="app.handlePlayer('+i+')" class="character char_'+i+'" style="width: 24px; height: 24px; background: url(./img/sf2-characters.png) 0 -'+i*24+'px; margin: 5px; display: inline-block;"></div>');
+                $('#characters').append('<div id="'+i+'" onclick="app.handlePlayer('+i+')" class="character char_'+i+'" style="width: 30px; height: 30px; background: url(./img/sf2-characters.png) 0 -'+i*24+'px; margin: 5px; display: inline-block;"></div>');
             } else if (i == 2 || i == 6 || i == 7 || i == 8) {
                 console.log('something else');
             } else {
                 app.enemies.push(i);
-                $('#opposition').append('<div id="'+i+'" onclick="app.handleEnemy('+i+')" class="character char_'+i+'" style="width: 24px; height: 24px; background: url(./img/sf2-characters.png) 0 -'+i*24+'px; margin: 5px; display: inline-block;"></div>');
+                $('#opposition').append('<div id="'+i+'" onclick="app.handleEnemy('+i+')" class="character char_'+i+'" style="width: 30px; height: 30px; background: url(./img/sf2-characters.png) 0 -'+i*24+'px; margin: 5px; display: inline-block;"></div>');
             }
         }
         setTimeout(function() {
             $('.char_'+app.charItem).css({'border': '3px solid red'});
             $('.char_'+app.goblinItem).css({'border': '3px solid blue'});
+            $('#enemiesCounter').val(app.enemiesCount);
+            // var e = document.getElementById("enemiesCounter");
+            // e.options[e.selectedIndex].value = app.enemiesCount;
         }, 700);
         if (sessionStorage.getItem('key') !== null) {
             app.connect(sessionStorage.getItem('key'));
@@ -161,12 +175,15 @@ var app = {
     },
     handleEnemy: function(id) {
         $('.char_'+app.goblinItem).css({'border': '3px solid white'});//'3px solid rgb(4, 183, 4)'});
-        // for (var i = 0; i < app.enemies.length; i++) {
-        //     $('#'+app.enemies[i]).css({'border': '3px solid rgb(4, 183, 4);'});
+        // for (var i = 0; i < app.enemiesCount.length; i++) {
+        //     $('#'+app.enemiesCount[i]).css({'border': '3px solid rgb(4, 183, 4);'});
         // }
         $('.char_'+id).css({'border': '3px solid blue'});
         app.goblinItem = id;
         localStorage.setItem('goblinItem', id);
+    },
+    enemyCount: function(count) {
+        localStorage.setItem("enemies", count)
     },
     refreshDeviceList: function() {
         console.log('refreshDeviceList');
@@ -181,10 +198,11 @@ var app = {
         // the list for devices with "Sensor" in the name
         if (device.name.match(/sensor/i)) {
 
-            var listItem = document.createElement('li'),
-                html = '<b>' + device.name + '</b><br/>' +
-                    'RSSI: ' + device.rssi + '&nbsp;|&nbsp;' +
-                    device.id +'&nbsp;|&nbsp;<button id="'+device.id+'" onclick="app.connect(\''+device.id+'\');">Connect</button>';
+            var listItem = document.createElement('div'),
+                // html = '<b>' + device.name + '</b><br/>' +
+                //     'RSSI: ' + device.rssi + '&nbsp;|&nbsp;' +
+                //     device.id +'&nbsp;|&nbsp;<button id="'+device.id+'" onclick="app.connect(\''+device.id+'\');">Connect</button>';
+                html = '<button id="'+device.id+'" onclick="app.connect(\''+device.id+'\');">Connect to '+device.name+'</button>';
             listItem.setAttribute("id", device.id);
             listItem.dataset.deviceId = device.id;  // TODO
             listItem.innerHTML = html;
@@ -197,7 +215,7 @@ var app = {
         // console.log(e.parentElement.dataset.deviceId);
         var deviceId = e;//'C4:BE:84:71:26:81';
         app.device = deviceId;
-        $('#'+app.device).css('background-color', 'green');
+        $('#'+app.device+' button').css('background', 'green');
         var onConnect = function() {
 
                 ble.startNotification(deviceId, button.service, button.data, app.onButtonData, app.onError);
@@ -393,9 +411,17 @@ var app = {
         ble.disconnect(deviceId, app.showMainPage, app.onError);
         window.location.reload();
     },
+    nextLevel: function() {
+        sessionStorage.setItem("app.mapToUse", app.mapToUse);
+        // var deviceId = event.target.dataset.deviceId;
+        var deviceId = app.device;//'C4:BE:84:71:26:81';
+        ble.disconnect(deviceId, app.showMainPage, app.onError);
+        window.location.reload();
+    },
     showMainPage: function() {
         mainPage.hidden = false;
         detailPage.hidden = true;
+        detailPage_cvsm.hidden = true;
     },
     showDeviceList: function() {
         deviceList.hidden = true;
@@ -404,11 +430,21 @@ var app = {
     showDetailPage: function() {
         mainPage.hidden = true;
         detailPage.hidden = false;
+        detailPage_cvsm.hidden = true;
+    },
+    showDetailPage_cvsm: function() {
+        mainPage.hidden = true;
+        detailPage.hidden = true;
+        detailPage_cvsm.hidden = false;
     },
     onError: function(reason) {
         alert("ERROR: " + reason); // real apps should use notification.alert
     },
     startGame: function() {
+        var e = document.getElementById("enemiesCounter");
+        var val = e.options[e.selectedIndex].value;
+        app.enemyCount(val);
+
         $('.app').css('display', 'none');
         app.showDetailPage();
         sessionStorage.setItem('key', app.device);
@@ -439,6 +475,40 @@ var app = {
         $('.instr-footer small').text('');
         // app.startPhaser();
         // window.location.href="breakout.html";
+    },
+    catvsmouse: function() {
+        // var e = document.getElementById("enemiesCounter");
+        // var val = e.options[e.selectedIndex].value;
+        // app.enemyCount(val);
+        // requirejs.undef('js/catvsmouse/lib/DependencyLoader');
+        // requirejs.undef('js/catvsmouse/BackgroundRenderer');
+        // requirejs.undef('js/catvsmouse/CharacterRenderer');
+        // requirejs.undef('js/catvsmouse/CollisionMap');
+        // requirejs.undef('js/catvsmouse/Agent');
+        // requirejs.undef('js/catvsmouse/Mob');
+        // requirejs.undef('js/catvsmouse/Tileset');
+        $('.app').css('display', 'none');
+        var pp = $('#player_cvsm').text();
+        $('#player_cvsm').empty();
+        pp = parseInt(localStorage.getItem("points") ,10);
+        if (isNaN(pp)) {
+            pp = 0;
+        }
+        $('#player_cvsm').append(pp);
+        app.showDetailPage_cvsm();
+        sessionStorage.setItem('key', app.device);
+        if (!app.buildHtml) {
+            // After connection open level
+            
+            requirejs.config({
+                // urlArgs: "bust=" + (new Date()).getTime(),
+                baseUrl: 'js/catvsmouse'
+            });
+            requirejs(['main']);
+            // setTimeout(function() {
+                app.buildHtml = true;
+            // }, 2000);
+        }
     },
     startPhaser: function() {
         game = new Phaser.Game(1024, 768, Phaser.AUTO, 'gameContainer');
