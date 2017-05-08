@@ -412,7 +412,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    NSLog(@"didUpdateValueForCharacteristic");
+    // NSLog(@"didUpdateValueForCharacteristic");
 
     NSString *key = [self keyForPeripheral: peripheral andCharacteristic:characteristic];
     NSString *notifyCallbackId = [notificationCallbacks objectForKey:key];

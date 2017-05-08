@@ -118,20 +118,20 @@ h1 {
 ul {
     padding: 0 0 0 0 !important;
 }
-span#time {
+span#time, span#time_cvsm {
     font-size: 40px;
     position: absolute;
     left: 20px;
     top: 5px;
     padding: 5px;
 }
-div#points {
+div#points, div#points_cvsm {
     position: absolute;
     right: 20px;
     top: 10px;
     font-size: 40px;
 }
-#player {
+#player, #player_cvsm {
     color: red;
     font-weight: bold;
     padding: 5px;
@@ -148,7 +148,7 @@ canvas.gamecanvas.canvas0 {
 #fps, #accelerometerData, #buttonState {
     display: none;
 }
-#disconnectButton {
+#disconnectButton, #disconnectButton_cvsm {
     position: absolute;
     top:3%;
     left: 50%;

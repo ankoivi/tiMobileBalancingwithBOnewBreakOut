@@ -79,33 +79,50 @@ function(Agent,
 				var pp = $('#player_cvsm').text();
 				$('#player_cvsm').empty();
 				pp = parseInt(pp ,10)+1;
+				// if (pp%5 == 0 && pp!=0) {
+				// 	console.log("Change level");
+				// }
+				/*if (pp%5 == 0 && pp!=0) {
+					if (app.mapNro == 6) {
+						app.mapNro = 0;
+					}
+					if (app.enemies_counter == 3) {
+						app.enemies_counter = 2;
+					}
+					if (app.mapNro == 0) {
+						app.mapToUse = "map";
+						app.mapNro++;
+					} else {
+						app.mapToUse = "map"+app.mapNro++;
+					}
+					console.log("can move to next level");
+					app.moveToNextLevel = true;
+					localStorage.setItem("enemies_2", app.enemies_counter++);
+					localStorage.setItem("points", pp);
+				}*/
 				if (pp == 5) {
 					app.mapToUse = "map2";
 					console.log("can move to next level");
 					app.moveToNextLevel = true;
 					localStorage.setItem("enemies_2", 1);
 					localStorage.setItem("points", pp);
-				}
-				if (pp == 10) {
+				} else if (pp == 10) {
 					app.mapToUse = "map3";
 					console.log("can move to next level");
 					app.moveToNextLevel = true;
 					localStorage.setItem("enemies_2", 2);
 					localStorage.setItem("points", pp);
-				}
-				if (pp == 15) {
+				} else if (pp == 15) {
 					app.mapToUse = "map4";
 					app.moveToNextLevel = true;
 					localStorage.setItem("enemies_2", 3);
 					localStorage.setItem("points", pp);
-				}
-				if (pp == 20) {
+				} else if (pp == 20) {
 					app.mapToUse = "map5";
 					app.moveToNextLevel = true;
 					localStorage.setItem("enemies_2", 3);
 					localStorage.setItem("points", pp);
-				}
-				if (pp == 25) {
+				} else if (pp == 25) {
 					app.mapToUse = "map6";
 					app.moveToNextLevel = true;
 					localStorage.setItem("enemies_2", 3);
