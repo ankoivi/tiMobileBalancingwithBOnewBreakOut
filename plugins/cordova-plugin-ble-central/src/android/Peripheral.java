@@ -17,6 +17,7 @@ package com.megster.cordova.ble.central;
 import android.app.Activity;
 
 import android.bluetooth.*;
+import android.os.Build;
 import android.util.Base64;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.LOG;
@@ -42,6 +43,7 @@ public class Peripheral extends BluetoothGattCallback {
     private byte[] advertisingData;
     private int advertisingRSSI;
     private boolean connected = false;
+    private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
 
@@ -63,8 +65,14 @@ public class Peripheral extends BluetoothGattCallback {
 
     public void connect(CallbackContext callbackContext, Activity activity) {
         BluetoothDevice device = getDevice();
+        connecting = true;
+
         connectCallback = callbackContext;
-        gatt = device.connectGatt(activity, false, this);
+        if (Build.VERSION.SDK_INT < 23) {
+            gatt = device.connectGatt(activity, false, this);
+        } else {
+            gatt = device.connectGatt(activity, false, this, BluetoothDevice.TRANSPORT_LE);
+        }
 
         PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
         result.setKeepCallback(true);
@@ -74,7 +82,10 @@ public class Peripheral extends BluetoothGattCallback {
     public void disconnect() {
         connectCallback = null;
         connected = false;
+        connecting = false;
+
         if (gatt != null) {
+            gatt.disconnect();
             gatt.close();
             gatt = null;
         }
@@ -90,6 +101,21 @@ public class Peripheral extends BluetoothGattCallback {
             json.put("advertising", byteArrayToJSON(advertisingData));
             // TODO real RSSI if we have it, else
             json.put("rssi", advertisingRSSI);
+        } catch (JSONException e) { // this shouldn't happen
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
+    public JSONObject asJSONObject(String errorMessage)  {
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("name", device.getName());
+            json.put("id", device.getAddress()); // mac address
+            json.put("errorMessage", errorMessage);
         } catch (JSONException e) { // this shouldn't happen
             e.printStackTrace();
         }
@@ -164,6 +190,10 @@ public class Peripheral extends BluetoothGattCallback {
         return connected;
     }
 
+    public boolean isConnecting() {
+        return connecting;
+    }
+
     public BluetoothDevice getDevice() {
         return device;
     }
@@ -178,7 +208,7 @@ public class Peripheral extends BluetoothGattCallback {
             connectCallback.sendPluginResult(result);
         } else {
             LOG.e(TAG, "Service discovery failed. status = " + status);
-            connectCallback.error(this.asJSONObject());
+            connectCallback.error(this.asJSONObject("Service discovery failed"));
             disconnect();
         }
     }
@@ -191,12 +221,13 @@ public class Peripheral extends BluetoothGattCallback {
         if (newState == BluetoothGatt.STATE_CONNECTED) {
 
             connected = true;
+            connecting = false;
             gatt.discoverServices();
 
         } else {
 
             if (connectCallback != null) {
-                connectCallback.error(this.asJSONObject());
+                connectCallback.error(this.asJSONObject("Peripheral Disconnected"));
             }
             disconnect();
         }
@@ -261,6 +292,29 @@ public class Peripheral extends BluetoothGattCallback {
         super.onDescriptorWrite(gatt, descriptor, status);
         LOG.d(TAG, "onDescriptorWrite " + descriptor);
         commandCompleted();
+    }
+
+
+    @Override
+    public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+        super.onReadRemoteRssi(gatt, rssi, status);
+        if (readCallback != null) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                updateRssi(rssi);
+                readCallback.success(rssi);
+            } else {
+                readCallback.error("Error reading RSSI status=" + status);
+            }
+
+            readCallback = null;
+        }
+        commandCompleted();
+    }
+
+    // Update rssi and scanRecord.
+    public void update(int rssi, byte[] scanRecord) {
+        this.advertisingRSSI = rssi;
+        this.advertisingData = scanRecord;
     }
 
     public void updateRssi(int rssi) {
@@ -339,6 +393,11 @@ public class Peripheral extends BluetoothGattCallback {
             notificationCallbacks.remove(key);
 
             if (gatt.setCharacteristicNotification(characteristic, false)) {
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION_UUID);
+                if (descriptor != null) {
+                    descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                    gatt.writeDescriptor(descriptor);
+                }
                 callbackContext.success();
             } else {
                 // TODO we can probably ignore and return success anyway since we removed the notification callback
@@ -408,6 +467,30 @@ public class Peripheral extends BluetoothGattCallback {
                 readCallback = null;
                 callbackContext.error("Read failed");
             }
+        }
+
+        if (!success) {
+            commandCompleted();
+        }
+
+    }
+
+    private void readRSSI(CallbackContext callbackContext) {
+
+        boolean success = false;
+
+        if (gatt == null) {
+            callbackContext.error("BluetoothGatt is null");
+            return;
+        }
+
+        readCallback = callbackContext;
+
+        if (gatt.readRemoteRssi()) {
+            success = true;
+        } else {
+            readCallback = null;
+            callbackContext.error("Read RSSI failed");
         }
 
         if (!success) {
@@ -519,6 +602,12 @@ public class Peripheral extends BluetoothGattCallback {
         queueCommand(command);
     }
 
+
+    public void queueReadRSSI(CallbackContext callbackContext) {
+        BLECommand command = new BLECommand(callbackContext, null, null, BLECommand.READ_RSSI);
+        queueCommand(command);
+    }
+
     // add a new command to the queue
     private void queueCommand(BLECommand command) {
         LOG.d(TAG,"Queuing Command " + command);
@@ -568,6 +657,10 @@ public class Peripheral extends BluetoothGattCallback {
                 LOG.d(TAG,"Remove Notify " + command.getCharacteristicUUID());
                 bleProcessing = true;
                 removeNotifyCallback(command.getCallbackContext(), command.getServiceUUID(), command.getCharacteristicUUID());
+            } else if (command.getType() == BLECommand.READ_RSSI) {
+                LOG.d(TAG,"Read RSSI");
+                bleProcessing = true;
+                readRSSI(command.getCallbackContext());
             } else {
                 // this shouldn't happen
                 throw new RuntimeException("Unexpected BLE Command type " + command.getType());

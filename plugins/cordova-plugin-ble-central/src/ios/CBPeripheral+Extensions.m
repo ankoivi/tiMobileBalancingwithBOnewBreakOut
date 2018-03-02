@@ -108,7 +108,7 @@ static char ADVERTISEMENT_RSSI_IDENTIFER;
     if (serviceData) {
         NSLog(@"%@", serviceData);
 
-        for(CBUUID *key in serviceData) {
+        for (CBUUID *key in [serviceData allKeys]) {
             [serviceData setObject:dataToArrayBuffer([serviceData objectForKey:key]) forKey:[key UUIDString]];
             [serviceData removeObjectForKey:key];
         }
@@ -128,6 +128,22 @@ static char ADVERTISEMENT_RSSI_IDENTIFER;
         [dict removeObjectForKey:CBAdvertisementDataServiceUUIDsKey];
         [dict setObject:serviceUUIDStrings forKey:CBAdvertisementDataServiceUUIDsKey];
 
+    }
+
+    // Solicited Services UUIDs is an array of CBUUIDs, convert into Strings
+    NSMutableArray *solicitiedServiceUUIDs = [dict objectForKey:CBAdvertisementDataSolicitedServiceUUIDsKey];
+    NSMutableArray *solicitiedServiceUUIDStrings;
+    if (solicitiedServiceUUIDs) {
+        // NSLog(@"%@", solicitiedServiceUUIDs);
+        solicitiedServiceUUIDStrings = [[NSMutableArray alloc] initWithCapacity:solicitiedServiceUUIDs.count];
+
+        for (CBUUID *uuid in solicitiedServiceUUIDs) {
+            [solicitiedServiceUUIDStrings addObject:[uuid UUIDString]];
+        }
+
+        // replace the UUID list with list of strings
+        [dict removeObjectForKey:CBAdvertisementDataSolicitedServiceUUIDsKey];
+        [dict setObject:solicitiedServiceUUIDStrings forKey:CBAdvertisementDataSolicitedServiceUUIDsKey];
     }
 
     // Convert the manufacturer data

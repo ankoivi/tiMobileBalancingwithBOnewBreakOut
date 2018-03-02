@@ -359,14 +359,14 @@ var app = {
          */
         // console.log(fx.toFixed(1)+' - '+fy.toFixed(1));
         if (app.buildHtml) {
-            if (fx.toFixed(1) >= 0.2) {
+            if (fx.toFixed(1) >= 0.1) {
                 // left
                 app.right = false;
                 app.left = true;
                 // setting.paddleMoveLeft = true;
                 // setting.paddleMoveLeft = false;
                 // player.doMove(-0.1, 0);
-            } else if (fx.toFixed(1) <= -0.2) {
+            } else if (fx.toFixed(1) <= -0.1) {
                 // right
                 app.right = true;
                 app.left = false;
@@ -379,12 +379,12 @@ var app = {
                 // setting.paddleMoveLeft = false;
                 // setting.paddleMoveRight = false;
             }
-            if (fy.toFixed(1) >= 0.2) {
+            if (fy.toFixed(1) >= 0.1) {
                 // up
                 app.down = false;
                 app.up = true;
                 // player.doMove(0, -0.1);
-            } else if (fy.toFixed(1) <= -0.2) {
+            } else if (fy.toFixed(1) <= -0.1) {
                 // down
                 app.down = true;
                 app.up = false;

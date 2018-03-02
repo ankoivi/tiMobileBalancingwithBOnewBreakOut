@@ -7,12 +7,17 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-ble-central": {
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
         },
-        "cordova-plugin-whitelist": {
+        "cordova-plugin-ble-central": {
+            "BLUETOOTH_USAGE_DESCRIPTION": "Use TI SensorTag to control the game",
             "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
+        }
+    }
 }
