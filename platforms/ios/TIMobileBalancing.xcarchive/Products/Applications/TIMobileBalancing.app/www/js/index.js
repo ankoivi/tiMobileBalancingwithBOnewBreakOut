@@ -110,7 +110,7 @@ var app = {
         disconnectButton.addEventListener('touchstart', this.disconnect, false);
         disconnectButton_cvsm.addEventListener('touchstart', this.disconnect, false);
         document.getElementById('mazeLogo').addEventListener('touchstart', this.startGame, false);
-        document.getElementById('boLogo').addEventListener('touchstart', this.startBreakout, false);
+        // document.getElementById('boLogo').addEventListener('touchstart', this.startBreakout, false);
         document.getElementById('catvsmouse').addEventListener('touchstart', this.catvsmouse, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
