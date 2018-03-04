@@ -140,13 +140,57 @@ function(Agent,
 				if (this.targetAgent.tileset.tileSpec.name == "player" && this.tileset.tileSpec.name.includes("monster")) {
 					timer = sessionStorage.getItem("duration");
 					clearInterval(app.countdownTimer);
-					$('#gameOver').css('display', 'block');
 					app.gameIsOver = true;
-					localStorage.setItem("enemies_2", 0);
-					localStorage.setItem("points", 0);
-					setTimeout(function() {
-						app.disconnect();
-					}, 5000);
+					if (app.use_top_list) {
+						// HANDLE TOP LISTS
+						$('#add_nick_to_top_list').css('display', 'block');
+						var player_points = $('#player_cvsm').text();
+						player_points = parseInt(player_points, 10);
+						var player_position = 0;
+						localStorage.setItem("enemies_2", 0);
+						localStorage.setItem("points", 0);
+						var top_list = JSON.parse(localStorage.getItem('catvsmouse_data'));
+						if (localStorage.getItem('catvsmouse_data') !== null) {
+							top_list.sort(function(a, b) {
+				                return parseFloat(b.points) - parseFloat(a.points);
+				            });
+							for (var i = 0; i < top_list.length; i++) {
+				                if (top_list[i].points < player_points) {
+				                	// if (i == 0)
+				                	// 	i = 1;
+				                    player_position = i + 1;
+				                    break;
+				                } else if (top_list[i].points == player_points) {
+				                	if (i == 0) {
+				                		player_position = i + 1;
+				                	} else {
+				                		player_position = i + 1;
+				                	}
+				                	break;
+				                } else if (i == top_list.length-1) {
+				                	player_position = top_list.length + 1;
+				                }
+				            }
+				        } else {
+				        	player_position = 1;
+				        }
+						document.getElementById("player_points").innerHTML = player_points;
+						document.getElementById("player_position").innerHTML = player_position;
+					} else {
+						$('#gameOver').css('display', 'block');
+						localStorage.setItem("enemies_2", 0);
+						localStorage.setItem("points", 0);
+						setTimeout(function() {
+							app.disconnect();
+						}, 5000);
+					}
+					// $('#gameOver').css('display', 'block');
+					// app.gameIsOver = true;
+					// localStorage.setItem("enemies_2", 0);
+					// localStorage.setItem("points", 0);
+					// setTimeout(function() {
+					// 	app.disconnect();
+					// }, 5000);
 				} else {
 					console.log("// SOME ERROR?");
 				}

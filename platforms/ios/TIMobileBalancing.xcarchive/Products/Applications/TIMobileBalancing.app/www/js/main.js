@@ -339,7 +339,7 @@ function(DependencyLoader,
 	function centerCanvases(){
 		_(canvases).each(function($canvas){
 			$canvas.css({
-				top: ($window.height() - $canvas.height())/2
+				top: (($window.height() - $canvas.height())/2)+10
 			});
 		});
 	}

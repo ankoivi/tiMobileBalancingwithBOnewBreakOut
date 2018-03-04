@@ -123,3 +123,21 @@ body {
 	line-height: 1.8;
 	margin-top: 30px;
 }
+#leader_board {
+	background-color: rgba(25, 68, 84, 0.2);
+	position: absolute;
+	left: -150px;
+	top: 340px;
+	width: 300px;
+}
+#cat_vs_mouse_top table {
+	width: 300px;
+}
+#cat_vs_mouse_top table td:nth-child(odd) {
+	text-align: left;
+}
+#cat_vs_mouse_top table td:nth-child(even) {
+	text-align: right;
+}
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}
