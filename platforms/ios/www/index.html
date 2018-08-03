@@ -78,14 +78,17 @@
                     <!-- <button onclick="app.startGame();">Start Game</button> -->
                     <img id="mazeLogo" src="img/mazeLogo.png" />
                 </div>
-                <div id="breakout">
+                <!-- <div id="breakout"> -->
                     <!-- <button onclick="app.startBreakout();"></button> -->
-                    <img id="boLogo" src="img/boLogo.png" />
-                </div>
+                    <!-- <img id="boLogo" src="img/boLogo.png" /> -->
+                <!-- </div> -->
                 <div id="breakout">
                     <!-- <button onclick="app.startBreakout();"></button> -->
                     <img id="catvsmouse" src="img/cvsm.png" />
                 </div>
+            </div>
+            <div id="leader_board">
+                <div id="cat_vs_mouse_top"></div>
             </div>
         </div>
         <div id="detailPage" style="top: 20px;">
@@ -108,6 +111,13 @@
         </div>
         <div id="gameOver">Game over!<br />Thanks for playing!</div>
         <div id="nextLevel">Prepare!<br />Next level starts soon!</div>
+        <div id="add_nick_to_top_list">
+            Game over!<br />
+            <input type="text" placeholder="Add your nick" id="player_name" /><br />
+            Your points <span id="player_points"></span><br />
+            You placed <span id="player_position"></span> in the top list.<br />
+            <button onclick="app.handle_save()">Save</button>
+        </div>
         <!-- <button onclick="app.disconnect(); window.location.reload();" style="position: absolute; left: 50%; top: 0;">Stop</button>
         <button onclick="app.connect();" style="position: absolute; left: 50%; top: 20px;">Start</button> -->
 

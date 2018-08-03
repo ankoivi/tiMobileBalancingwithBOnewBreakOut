@@ -138,6 +138,7 @@ body {
 }
 #cat_vs_mouse_top table td:nth-child(even) {
 	text-align: right;
+	padding-right: 5px;
 }
 tr:nth-child(even) {background: #CCC}
 tr:nth-child(odd) {background: #FFF}

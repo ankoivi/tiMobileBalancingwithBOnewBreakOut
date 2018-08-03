@@ -335,14 +335,14 @@ var app = {
         // app.aX = fx*14*(-1);
         app.aX = fx*5*(-1);
         if(setting.gameState == true) {
-            if (parseFloat(app.aX.toFixed(1)) >= 0.3) {
+            if (parseFloat(app.aX.toFixed(1)) >= 0.2) {
                 // left
                 app.right2 = false;
                 app.left2 = true;
                 setting.paddleMoveLeft = true;
                 setting.paddleMoveLeft = false;
                 // player.doMove(-0.1, 0);
-            } else if (parseFloat(app.aX.toFixed(1)) <= -0.3) {
+            } else if (parseFloat(app.aX.toFixed(1)) <= -0.2) {
                 // right
                 app.right2 = true;
                 app.left2 = false;

@@ -155,7 +155,7 @@ canvas.gamecanvas.canvas0 {
     margin-right: -50%;
     transform: translate(-50%, -3%);
 }
-#gameOver, #nextLevel {
+#gameOver, #nextLevel, #add_nick_to_top_list {
     display: none;
     position: absolute;
     top: 50%;

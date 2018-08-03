@@ -504,7 +504,11 @@ function(DependencyLoader,
 				monster2.chooseAction();
 				monster3.chooseAction();
 			} else {
-				monster.chooseAction();
+				if (monster === undefined || monster.length <= 0 || monster === null) {
+					console.log("no monsters yet");
+				} else {
+					monster.chooseAction();
+				}
 			}
 			coin.chooseAction();
 			

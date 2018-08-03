@@ -38,3 +38,11 @@ captures/
 
 # Keystore files
 *.jks
+
+# Antti
+platforms/android/
+platforms/ios/build/
+platforms/ios/cordova/
+platforms/ios/CordovaLib/
+platforms/ios/platform_www/
+platforms/ios/www/

@@ -1,58 +1,58 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
-    },
-    "config_munge": {
-        "files": {
-            "config.xml": {
-                "parents": {
-                    "/widget": [
-                        {
-                            "xml": "<feature name=\"BLE\"><param name=\"ios-package\" onload=\"true\" value=\"BLECentralPlugin\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
-            },
-            "*-Info.plist": {
-                "parents": {
-                    "NSBluetoothPeripheralUsageDescription": [
-                        {
-                            "xml": "<string>Use TI SensorTag to control the game</string>",
-                            "count": 1
-                        }
-                    ]
-                }
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {
+      "config.xml": {
+        "parents": {
+          "/widget": [
+            {
+              "xml": "<feature name=\"BLE\"><param name=\"ios-package\" onload=\"true\" value=\"BLECentralPlugin\" /></feature>",
+              "count": 1
             }
+          ]
         }
-    },
-    "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
-        },
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
-        },
-        "cordova-plugin-ble-central": {
-            "BLUETOOTH_USAGE_DESCRIPTION": "Use TI SensorTag to control the game",
-            "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
+      },
+      "*-Info.plist": {
+        "parents": {
+          "NSBluetoothPeripheralUsageDescription": [
+            {
+              "xml": "<string>Use TI SensorTag to control the game</string>",
+              "count": 1
+            }
+          ]
         }
-    },
-    "dependent_plugins": {},
-    "modules": [
-        {
-            "id": "cordova-plugin-ble-central.ble",
-            "file": "plugins/cordova-plugin-ble-central/www/ble.js",
-            "pluginId": "cordova-plugin-ble-central",
-            "clobbers": [
-                "ble"
-            ]
-        }
-    ],
-    "plugin_metadata": {
-        "cordova-plugin-whitelist": "1.2.1",
-        "cordova-plugin-compat": "1.2.0",
-        "cordova-plugin-ble-central": "1.1.4"
+      }
     }
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
+    },
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
+    },
+    "cordova-plugin-ble-central": {
+      "BLUETOOTH_USAGE_DESCRIPTION": "Use TI SensorTag to control the game",
+      "PACKAGE_NAME": "fi.samk.tki.timobilebalancing"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "id": "cordova-plugin-ble-central.ble",
+      "file": "plugins/cordova-plugin-ble-central/www/ble.js",
+      "pluginId": "cordova-plugin-ble-central",
+      "clobbers": [
+        "ble"
+      ]
+    }
+  ],
+  "plugin_metadata": {
+    "cordova-plugin-whitelist": "1.2.1",
+    "cordova-plugin-compat": "1.2.0",
+    "cordova-plugin-ble-central": "1.1.4"
+  }
 }

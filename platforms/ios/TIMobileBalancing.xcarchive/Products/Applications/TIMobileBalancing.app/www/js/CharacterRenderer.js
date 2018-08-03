@@ -12,8 +12,9 @@ define(['Renderer'],function(Renderer){
 			this.context.clearRect(0, 0, this.w, this.h);
 
 			_(this.agents).each(function(agent){
+				console.log(agent);
 				self.tileSpec = agent.getTileSpec();
-				// console.log(self.tileSpec);
+				console.log(self.tileSpec);
 				if (self.tileSpec.name == 'player' && app.charCount === 0) {
 					console.log('player');
 					self.tileSpec.standing.y = app.charItem*24;
