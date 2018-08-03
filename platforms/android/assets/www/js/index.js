@@ -91,9 +91,6 @@ var app = {
     moveToNextLevel: false,
     aX: 0,
     countdownTimer: null,
-    logging: 0,
-    enemies_counter: -1,
-    mapNro: 0,
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -217,7 +214,7 @@ var app = {
         // console.log(e.parentElement.dataset.deviceId);
         var deviceId = e;//'C4:BE:84:71:26:81';
         app.device = deviceId;
-        $('#'+app.device+' button').css('background', 'green');
+        $('#'+app.device).css('background-color', 'green');
         var onConnect = function() {
 
                 ble.startNotification(deviceId, button.service, button.data, app.onButtonData, app.onError);
@@ -315,14 +312,14 @@ var app = {
         // app.aX = fx*14*(-1);
         app.aX = fx*5*(-1);
         if(setting.gameState == true) {
-            if (parseFloat(app.aX.toFixed(1)) >= 0.2) {
+            if (parseFloat(app.aX.toFixed(1)) >= 0.3) {
                 // left
                 app.right2 = false;
                 app.left2 = true;
                 setting.paddleMoveLeft = true;
                 setting.paddleMoveLeft = false;
                 // player.doMove(-0.1, 0);
-            } else if (parseFloat(app.aX.toFixed(1)) <= -0.2) {
+            } else if (parseFloat(app.aX.toFixed(1)) <= -0.3) {
                 // right
                 app.right2 = true;
                 app.left2 = false;
@@ -359,14 +356,14 @@ var app = {
          */
         // console.log(fx.toFixed(1)+' - '+fy.toFixed(1));
         if (app.buildHtml) {
-            if (fx.toFixed(1) >= 0.2) {
+            if (fx.toFixed(1) >= 0.3) {
                 // left
                 app.right = false;
                 app.left = true;
                 // setting.paddleMoveLeft = true;
                 // setting.paddleMoveLeft = false;
                 // player.doMove(-0.1, 0);
-            } else if (fx.toFixed(1) <= -0.2) {
+            } else if (fx.toFixed(1) <= -0.3) {
                 // right
                 app.right = true;
                 app.left = false;
@@ -379,12 +376,12 @@ var app = {
                 // setting.paddleMoveLeft = false;
                 // setting.paddleMoveRight = false;
             }
-            if (fy.toFixed(1) >= 0.2) {
+            if (fy.toFixed(1) >= 0.3) {
                 // up
                 app.down = false;
                 app.up = true;
                 // player.doMove(0, -0.1);
-            } else if (fy.toFixed(1) <= -0.2) {
+            } else if (fy.toFixed(1) <= -0.3) {
                 // down
                 app.down = true;
                 app.up = false;

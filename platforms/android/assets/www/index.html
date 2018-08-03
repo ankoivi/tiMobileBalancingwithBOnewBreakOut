@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"/>
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'self' 'unsafe-inline' 'unsafe-eval'; script-src * 'self' 'unsafe-inline' 'unsafe-eval';">
+
+
+
+
+<!-- http://www.creativebloq.com/html5/build-tile-based-html5-game-31410992 -->
+
+
+
+
+
+
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css"></link>
+        <link rel="stylesheet" media="screen" href="css/game.css"></link>
+        <link rel="stylesheet" media="screen" href="css/normalise.css"></link>
+        <link rel="stylesheet" media="screen" href="css/canvases.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/style.css"></link>
+        <title>TI Mobile Balancing</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>SAMK TI SensorTag DEMO</h1>
+            <div id="mainPage">
+                <ul id="deviceList">
+                </ul>
+                <button id="refreshButton">Refresh</button>
+                <div id="heartCollection">
+                    <div id="charSelection">
+                        <h3>Player</h3>
+                        <div id="characters"></div>
+                        <h3>Enemy</h3>
+                        <label for="enemiesCounter">Enemies: </label>
+                        <select name="enemiesCounter" id="enemiesCounter">
+                            <option value="0">0</option>
+                            <option value="1" selected="selected">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option></select>
+                        <div id="opposition"></div>
+                    </div>
+                    <!-- <button onclick="app.startGame();">Start Game</button> -->
+                    <img id="mazeLogo" src="img/mazeLogo.png" />
+                </div>
+                <div id="breakout">
+                    <!-- <button onclick="app.startBreakout();"></button> -->
+                    <img id="boLogo" src="img/boLogo.png" />
+                </div>
+                <div id="breakout">
+                    <!-- <button onclick="app.startBreakout();"></button> -->
+                    <img id="catvsmouse" src="img/boLogo.png" />
+                </div>
+            </div>
+        </div>
+        <div id="detailPage" style="top: 20px;">
+            <div id="points"><span id="player">0</span> - <span id="monster">0</span></div>
+            <span id="time">**:**</span>
+            <div id="fps"></div>
+            <div id="accelerometerData">waiting...</div>
+            <div id="temperatureData">waiting...</div>
+            <div id="buttonState"></div>
+            <button id="disconnectButton">Disconnect</button>
+
+        </div>
+        <div id="detailPage_cvsm" style="top: 20px; background-color: red;">
+            <div id="points_cvsm"><span id="player_cvsm">0</span></div>
+            <span id="time_cvsm">**:**</span>
+            <!-- <div id="fps_cvsm"></div> -->
+            <div id="buttonState_cvsm"></div>
+            <button id="disconnectButton_cvsm">Disconnect</button>
+
+        </div>
+        <div id="gameOver">Game over!<br />Thanks for playing!</div>
+        <div id="nextLevel">Prepare!<br />Next level starts soon!</div>
+        <!-- <button onclick="app.disconnect(); window.location.reload();" style="position: absolute; left: 50%; top: 0;">Stop</button>
+        <button onclick="app.connect();" style="position: absolute; left: 50%; top: 20px;">Start</button> -->
+
+        <!-- <div id="mainPage">
+            <ul id="deviceList">
+            </ul>
+            <button id="refreshButton">Refresh</button>
+        </div>
+        <div id="detailPage">
+            <div id="accelerometerData">waiting...</div>
+            <div id="temperatureData"></div>
+            <div id="buttonState"></div>
+            <button id="disconnectButton">Disconnect</button>
+        </div> -->
+        <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!-- <script src="js/phaser.js"></script>
+        <script src="js/breakout.js"></script> -->
+        <script src="js/breakoutgame.js"></script>
+
+        <!--<script src="js/lib/jquery-1.9.0.js"></script>-->
+        <script src="js/lib/underscore-min-1.4.3.js"></script>
+        <script src="js/lib/toolbox.js"></script>
+        <script src="js/lib/require.js"></script>
+        <!--<script data-main="js/main" src="js/lib/require.js"></script>-->
+
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+    <script type="text/javascript">
+        var game;
+
+        app.initialize();
+    </script>
+    
+</html>
