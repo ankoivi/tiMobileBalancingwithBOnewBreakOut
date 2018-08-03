@@ -13,6 +13,16 @@
             "id": "cordova-plugin-ble-central"
         },
         "is_top_level": true,
+        "variables": {
+            "BLUETOOTH_USAGE_DESCRIPTION": "Use TI SensorTag to control the game"
+        }
+    },
+    "cordova-plugin-compat": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-compat@^1.0.0"
+        },
+        "is_top_level": false,
         "variables": {}
     }
 }

@@ -1,0 +1,24 @@
+{
+    "name": "fi.samk.tki.timobilebalancing",
+    "version": "0.0.1",
+    "displayName": "TIMobileBalancing",
+    "cordova": {
+        "platforms": [
+            "android",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-ble-central": {
+                "BLUETOOTH_USAGE_DESCRIPTION": "Use TI SensorTag to control the game"
+            }
+        }
+    },
+    "dependencies": {
+        "cordova-android": "^6.2.3",
+        "cordova-ios": "~4.4.0",
+        "cordova-plugin-ble-central": "^1.1.4",
+        "cordova-plugin-compat": "^1.2.0",
+        "cordova-plugin-whitelist": "1"
+    }
+}

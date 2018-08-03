@@ -94,6 +94,8 @@ var app = {
     logging: 0,
     enemies_counter: -1,
     mapNro: 0,
+    clear_top_list_date: 0,
+    use_top_list: true,
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -108,11 +110,27 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         refreshButton.addEventListener('touchstart', this.refreshDeviceList, false);
         disconnectButton.addEventListener('touchstart', this.disconnect, false);
+        leader_board.addEventListener('touchstart', this.clear_top_list, false);
         disconnectButton_cvsm.addEventListener('touchstart', this.disconnect, false);
         document.getElementById('mazeLogo').addEventListener('touchstart', this.startGame, false);
-        document.getElementById('boLogo').addEventListener('touchstart', this.startBreakout, false);
+        // document.getElementById('boLogo').addEventListener('touchstart', this.startBreakout, false);
         document.getElementById('catvsmouse').addEventListener('touchstart', this.catvsmouse, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
+    },
+    clear_top_list: function() {
+        var temp_date = Date.now();
+        console.log(temp_date - app.clear_top_list_date);
+        if (temp_date - app.clear_top_list_date < 250) {
+            var r = confirm("Clear top list?");
+            if (r == true) {
+                // txt = "You pressed OK!";
+                localStorage.removeItem("catvsmouse_data");
+            } else {
+                // txt = "You pressed Cancel!";
+            }
+            app.top_lists();
+        }
+        app.clear_top_list_date = temp_date;
     },
     // deviceready Event Handler
     //
@@ -136,7 +154,6 @@ var app = {
         if (localStorage.getItem('enemies') !== null) {
             app.enemiesCount = localStorage.getItem('enemies');
         }
-
         // TODO character selection and speed + opposite
         // 0 - 26 x24px
         for (var i = 0; i < 27; i++) {
@@ -159,6 +176,9 @@ var app = {
         }, 700);
         if (sessionStorage.getItem('key') !== null) {
             app.connect(sessionStorage.getItem('key'));
+        }
+        if (app.use_top_list) {
+            app.top_lists();
         }
         // setTimeout(function() {
         //     $.getScript("js/main.js", function(){
@@ -359,14 +379,14 @@ var app = {
          */
         // console.log(fx.toFixed(1)+' - '+fy.toFixed(1));
         if (app.buildHtml) {
-            if (fx.toFixed(1) >= 0.2) {
+            if (fx.toFixed(1) >= 0.1) {
                 // left
                 app.right = false;
                 app.left = true;
                 // setting.paddleMoveLeft = true;
                 // setting.paddleMoveLeft = false;
                 // player.doMove(-0.1, 0);
-            } else if (fx.toFixed(1) <= -0.2) {
+            } else if (fx.toFixed(1) <= -0.1) {
                 // right
                 app.right = true;
                 app.left = false;
@@ -379,12 +399,12 @@ var app = {
                 // setting.paddleMoveLeft = false;
                 // setting.paddleMoveRight = false;
             }
-            if (fy.toFixed(1) >= 0.2) {
+            if (fy.toFixed(1) >= 0.1) {
                 // up
                 app.down = false;
                 app.up = true;
                 // player.doMove(0, -0.1);
-            } else if (fy.toFixed(1) <= -0.2) {
+            } else if (fy.toFixed(1) <= -0.1) {
                 // down
                 app.down = true;
                 app.up = false;
@@ -523,6 +543,49 @@ var app = {
 
         game.state.start('level0');
 
+    },
+    handle_save: function() {
+        var points = document.getElementById("player_points").innerHTML;
+        document.getElementById("player_points").innerHTML = "";
+        var name = document.getElementById("player_name").value;
+        document.getElementById("player_name").value = "";
+        app.save_cvsm_data(points, name);
+    },
+    save_cvsm_data: function(points, name) {
+        if (localStorage.getItem('catvsmouse_data') !== null) {
+            var b={"name": name, "points": points};
+            var top_list = JSON.parse(localStorage.getItem('catvsmouse_data'));
+            // var top_list = localStorage.getItem('catvsmouse_data');
+            top_list.push(b);
+            // top_list[top_list.length]=b;
+            localStorage.setItem('catvsmouse_data', JSON.stringify(top_list));
+        } else {
+            var a=[], b={"name": name, "points": points};
+            a.push(b);
+            localStorage.setItem('catvsmouse_data', JSON.stringify(a));
+        }
+        app.disconnect();
+    },
+    top_lists: function() {
+        if (localStorage.getItem('catvsmouse_data') !== null) {
+            document.getElementById("cat_vs_mouse_top").innerHTML = "";
+            var table = "<h3>Cat vs Mouse top list</h3><table>";
+            var top_list = JSON.parse(localStorage.getItem('catvsmouse_data'));
+            // var top_list = localStorage.getItem('catvsmouse_data');
+            top_list.sort(function(a, b) {
+                return parseFloat(b.points) - parseFloat(a.points);
+            });
+            for (var i = 0; i < top_list.length; i++) {
+                if (i<10) {
+                    console.log(JSON.stringify(top_list[i]));
+                    table += "<tr><td><b>"+top_list[i].name+"</b></td><td><i>"+top_list[i].points+"</i></td></tr>";
+                }
+            }
+            table += "</table>";
+            document.getElementById("cat_vs_mouse_top").innerHTML = table;
+        } else {
+            document.getElementById("cat_vs_mouse_top").innerHTML = "";
+        }
     }
 };
 

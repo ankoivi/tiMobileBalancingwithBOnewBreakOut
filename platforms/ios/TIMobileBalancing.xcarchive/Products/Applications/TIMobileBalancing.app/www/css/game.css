@@ -1,0 +1,34 @@
+﻿body
+{
+    font-family: 'Segoe UI', sans-serif;
+    background: #ffffff;
+    /*-webkit-transform: scale(0.5); /* Safari */*/
+    /*transform: scale(0.5);*/
+}
+
+#gameContainer
+{
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute !important;
+    right: 0;
+    top: 0;
+    background: none repeat scroll 0 0 #fff;
+    overflow: hidden;
+    position: relative;
+    /*width: 320px;*/
+    width: 100%;
+    cursor: none;
+}
+
+#gameContainer canvas {
+    margin: auto;
+    background-color: #fff;
+    border: 1px solid;
+}
+
+
+span {
+    font-style: italic
+}
